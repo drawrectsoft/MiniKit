@@ -26,6 +26,10 @@ open class ViewController: NSObject {
         return _view ?? View(frame: .zero)
     }
 
+    public override init() {
+        super.init()
+    }
+
     open func loadView() {
         _view = View(frame: .zero)
         _view?.autoresizingMask = [.width, .height]

@@ -53,15 +53,15 @@ public enum ContainedViewLayoutTransition {
         switch self {
         case .immediate:
             view.frame = frame
-        case let .animated(duration, curve):
+        case .animated:
             if view.window == nil {
                 view.frame = frame
                 return
             }
 
             NSAnimationContext.runAnimationGroup { context in
-                context.duration = duration
-                context.timingFunction = CAMediaTimingFunction(name: timingFunctionName)
+                context.duration = self.duration
+                context.timingFunction = CAMediaTimingFunction(name: self.timingFunctionName)
                 view.animator().frame = frame
             }
         }

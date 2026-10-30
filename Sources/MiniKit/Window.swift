@@ -2,11 +2,6 @@ import AppKit
 
 open class NavigationViewController: ViewController {
     public private(set) var stack: [ViewController] = []
-
-    public var topController: ViewController {
-        return stack.last ?? emptyController
-    }
-
     public let emptyController: ViewController
 
     public init(root controller: ViewController) {
@@ -17,9 +12,8 @@ open class NavigationViewController: ViewController {
     }
 
     open override func loadView() {
-        let content = View(frame: .zero)
-        _ = content
-        _view = content
+        let contentView = View(frame: .zero)
+        _view = contentView
     }
 
     open func push(_ controller: ViewController, animated: Bool = false) {
@@ -27,8 +21,10 @@ open class NavigationViewController: ViewController {
         stack.append(controller)
         let target = self.view.bounds
         controller.view.frame = target
-        if let content = _view {
+        if let content = self.view.superview {
             content.addSubview(controller.view)
+        } else {
+            self.view.addSubview(controller.view)
         }
         controller.viewWillAppear(animated)
     }
@@ -42,6 +38,10 @@ open class NavigationViewController: ViewController {
         topController.viewWillAppear(animated)
     }
 
+    public var topController: ViewController {
+        return stack.last ?? emptyController
+    }
+
     public func setRoot(_ controller: ViewController, animated: Bool = false) {
         for item in stack {
             item.view.removeFromSuperview()
@@ -50,8 +50,10 @@ open class NavigationViewController: ViewController {
         controller.navigationController = self
         let target = self.view.bounds
         controller.view.frame = target
-        if let content = _view {
+        if let content = self.view.superview {
             content.addSubview(controller.view)
+        } else {
+            self.view.addSubview(controller.view)
         }
         controller.viewWillAppear(animated)
     }
